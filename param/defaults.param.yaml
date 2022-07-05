@@ -1,0 +1,4 @@
+/**:
+  ros__parameters:
+    baudrate: 256000
+    update_rate: 100
