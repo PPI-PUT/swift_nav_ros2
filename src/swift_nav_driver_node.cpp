@@ -22,9 +22,10 @@ SwiftNavDriverNode::SwiftNavDriverNode(const rclcpp::NodeOptions & options)
 :  Node("swift_nav_driver", options)
 {
   const auto baudrate = declare_parameter("baudrate").get<int64_t>();
-  const auto update_rate = declare_parameter("update_rate").get<int64_t>();
-  m_swift_nav = std::make_unique<swift_nav::SwiftNavDriver>();
-  m_swift_nav->set_parameters(baudrate, update_rate);
+  const auto port = declare_parameter("port").get<std::string>();
+  const auto frame_id = declare_parameter("frame_id").get<std::string>();
+  m_swift_nav = std::make_unique<swift_nav::SwiftNavDriver>(port.c_str(), frame_id);
+  m_swift_nav->set_parameters(baudrate);
 
   // Publisher
   m_gnss_publisher =
@@ -34,21 +35,12 @@ SwiftNavDriverNode::SwiftNavDriverNode(const rclcpp::NodeOptions & options)
 
   m_callback_group_subscribers = this->create_callback_group(
     rclcpp::CallbackGroupType::MutuallyExclusive);
-  auto timer_callback = std::bind(&SwiftNavDriverNode::onTimer, this);
-  auto period = std::chrono::duration_cast<std::chrono::nanoseconds>(
-    std::chrono::duration<double>(1.0 / static_cast<double>(update_rate)));
-
-  m_timer = std::make_shared<rclcpp::GenericTimer<decltype(timer_callback)>>(
-    this->get_clock(), period, std::move(timer_callback),
-    this->get_node_base_interface()->get_context());
-  this->get_node_timers_interface()->add_timer(m_timer, m_callback_group_subscribers);
-
 }
 
-void SwiftNavDriverNode::onTimer()
-{
-  m_swift_nav->check_param();
-}
+    void SwiftNavDriverNode::process() {
+        m_swift_nav->process();
+        std::pair<void *, std::string> data = m_swift_nav->getOutput();
+    }
 
 }  // namespace swift_nav
 

@@ -1,4 +1,5 @@
 /**:
   ros__parameters:
     baudrate: 256000
-    update_rate: 100
+    port: "/dev/sensors/gnss"
+    frame_id: "gnss"

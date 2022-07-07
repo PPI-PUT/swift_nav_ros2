@@ -19,18 +19,20 @@ project(swift_nav_ros2)
 # require that dependencies from package.xml be available
 find_package(ament_cmake_auto REQUIRED)
 
-ament_auto_find_build_dependencies(REQUIRED
-  ${${PROJECT_NAME}_BUILD_DEPENDS}
-  ${${PROJECT_NAME}_BUILDTOOL_DEPENDS}
-)
+ament_auto_find_build_dependencies()
 
 set(SWIFT_NAV_ROS2_LIB_SRC
-  src/swift_nav_driver.cpp
+        "src/swift_nav_driver.cpp"
+        "src/gnss_handler.cpp"
+        "src/sbp_serial_reader.cpp"
+        "src/swift_nav_driver_node.cpp"
 )
 
 set(SWIFT_NAV_ROS2_LIB_HEADERS
-  include/swift_nav_ros2/swift_nav_driver.hpp
-  include/swift_nav_ros2/visibility_control.hpp
+        "include/swift_nav_ros2/swift_nav_driver.hpp"
+        "include/swift_nav_ros2/visibility_control.hpp"
+        "include/swift_nav_ros2/sbp_serial_reader.hpp"
+        "include/swift_nav_ros2/gnss_handler.hpp"
 )
 
 # generate library
@@ -40,25 +42,15 @@ ament_auto_add_library(${PROJECT_NAME} SHARED
 )
 
 target_link_libraries(${PROJECT_NAME} /usr/local/lib/libsbp.a)
+target_link_libraries(${PROJECT_NAME} /usr/local/lib/libserialport.so)
 
-set(SWIFT_NAV_ROS2_NODE_SRC
-  src/swift_nav_driver_node.cpp
-)
+autoware_set_compile_options(${PROJECT_NAME})
 
-set(SWIFT_NAV_ROS2_NODE_HEADERS
-  include/swift_nav_ros2/swift_nav_driver_node.hpp
-)
+set(SWIFT_NAV_NODE_EXE swift_nav_ros2_exe)
+ament_auto_add_executable(${SWIFT_NAV_NODE_EXE} src/main.cpp)
+autoware_set_compile_options(${SWIFT_NAV_NODE_EXE})
 
-# generate component node library
-ament_auto_add_library(${PROJECT_NAME}_node SHARED
-  ${SWIFT_NAV_ROS2_NODE_SRC}
-  ${SWIFT_NAV_ROS2_NODE_HEADERS}
-)
-
-rclcpp_components_register_node(${PROJECT_NAME}_node
-  PLUGIN "swift_nav::SwiftNavDriverNode"
-  EXECUTABLE ${PROJECT_NAME}_exe
-)
+#########################################################
 
 # Testing
 if(BUILD_TESTING)
