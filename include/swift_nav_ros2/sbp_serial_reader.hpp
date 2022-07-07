@@ -21,5 +21,5 @@ namespace swift_nav {
         const char *m_serial_name;
         struct sp_port *m_piksi_port;
     };
-}  // namespace swift_nav_driver
+}  // namespace swift_nav
 #endif //BUILD_SBP_SERIAL_READER_HPP

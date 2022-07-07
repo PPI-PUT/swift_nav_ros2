@@ -15,31 +15,32 @@
 #include "swift_nav_ros2/swift_nav_driver_node.hpp"
 
 
-namespace swift_nav
-{
+namespace swift_nav {
 
-SwiftNavDriverNode::SwiftNavDriverNode(const rclcpp::NodeOptions & options)
-:  Node("swift_nav_driver", options)
-{
-  const auto baudrate = declare_parameter("baudrate").get<int64_t>();
-  const auto port = declare_parameter("port").get<std::string>();
-  const auto frame_id = declare_parameter("frame_id").get<std::string>();
-  m_swift_nav = std::make_unique<swift_nav::SwiftNavDriver>(port.c_str(), frame_id);
-  m_swift_nav->set_parameters(baudrate);
+    SwiftNavDriverNode::SwiftNavDriverNode(const rclcpp::NodeOptions &options)
+            : Node("swift_nav_driver", options) {
+        const auto baudrate = declare_parameter("baudrate").get<int64_t>();
+        const auto port = declare_parameter("port").get<std::string>();
+        const auto frame_id = declare_parameter("frame_id").get<std::string>();
+        m_swift_nav = std::make_unique<swift_nav::SwiftNavDriver>(port.c_str(), frame_id);
+        m_swift_nav->set_parameters(baudrate);
 
-  // Publisher
-  m_gnss_publisher =
-    this->create_publisher<sensor_msgs::msg::NavSatFix>(
-      "gnss/nav_sat_fix",
-      1);
+        // Publisher
+        m_gnss_publisher =
+                this->create_publisher<sensor_msgs::msg::NavSatFix>(
+                        "gnss/nav_sat_fix",
+                        1);
 
-  m_callback_group_subscribers = this->create_callback_group(
-    rclcpp::CallbackGroupType::MutuallyExclusive);
-}
+        m_callback_group_subscribers = this->create_callback_group(
+                rclcpp::CallbackGroupType::MutuallyExclusive);
+    }
 
     void SwiftNavDriverNode::process() {
         m_swift_nav->process();
         std::pair<void *, std::string> data = m_swift_nav->getOutput();
+
+        (*static_cast<sensor_msgs::msg::NavSatFix *>(data.first)).header.stamp = Node::now();
+        m_gnss_publisher->publish((*static_cast<sensor_msgs::msg::NavSatFix *>(data.first)));
     }
 
 }  // namespace swift_nav

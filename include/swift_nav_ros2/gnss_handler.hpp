@@ -29,7 +29,6 @@ namespace swift_nav {
         sensor_msgs::msg::NavSatFix m_navSatFixLlh;
         void handle_sbp_msg(uint16_t sender_id, const sbp_msg_pos_llh_cov_t& msg) override;
         void convert_to_ros_msg_pos_llh_cov(const sbp_msg_pos_llh_cov_t* msg);
-
     };
 } // namespace swift_nav
 

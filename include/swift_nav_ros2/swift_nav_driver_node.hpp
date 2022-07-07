@@ -27,7 +27,6 @@ namespace swift_nav {
     class SWIFT_NAV_ROS2_PUBLIC SwiftNavDriverNode : public rclcpp::Node {
     public:
         explicit SwiftNavDriverNode(const rclcpp::NodeOptions &options);
-
         SwiftNavDriverPtr m_swift_nav{nullptr};
 
         void process();
