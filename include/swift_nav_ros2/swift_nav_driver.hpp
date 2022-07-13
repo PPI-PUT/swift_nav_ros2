@@ -18,23 +18,30 @@
 #include <swift_nav_ros2/visibility_control.hpp>
 #include <sensor_msgs/msg/nav_sat_fix.hpp>
 
+#include <swift_nav_ros2/sbp_serial_reader.hpp>
+#include <swift_nav_ros2/gnss_handler.hpp>
 
-namespace swift_nav
-{
+#include <string>
 
-class SWIFT_NAV_ROS2_PUBLIC SwiftNavDriver
-{
-public:
-  SwiftNavDriver();
-  void set_parameters(int64_t baudrate,
-                      int64_t update_rate);
-  int32_t check_param() const;
 
-private:
-  // Default parameters
-  int64_t m_baudrate;
-  int64_t m_update_rate;
-};
+namespace swift_nav {
+
+    class SWIFT_NAV_ROS2_PUBLIC SwiftNavDriver {
+    public:
+        SwiftNavDriver(const char *serial_name, std::string frame_id);
+        void set_parameters(int64_t baudrate);
+        int32_t check_param() const;
+        void init();
+        void process();
+        std::pair<void *, std::string> getOutput();
+
+    private:
+        sbp::State m_s;
+        SbpSerialReader m_reader;
+        GNSSHandler* m_handler;
+        // Default parameters
+        int64_t m_baudrate;
+    };
 
 }  // namespace swift_nav
 

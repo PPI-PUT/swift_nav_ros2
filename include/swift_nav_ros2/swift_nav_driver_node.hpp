@@ -20,23 +20,21 @@
 #include <rclcpp/rclcpp.hpp>
 
 
-namespace swift_nav
-{
+namespace swift_nav {
 
-using SwiftNavDriverPtr = std::unique_ptr<swift_nav::SwiftNavDriver>;
+    using SwiftNavDriverPtr = std::unique_ptr<swift_nav::SwiftNavDriver>;
 
-class SWIFT_NAV_ROS2_PUBLIC SwiftNavDriverNode : public rclcpp::Node
-{
-public:
-  explicit SwiftNavDriverNode(const rclcpp::NodeOptions & options);
-  SwiftNavDriverPtr m_swift_nav{nullptr};
-private:
-  rclcpp::Publisher<sensor_msgs::msg::NavSatFix>::SharedPtr m_gnss_publisher;
-  rclcpp::CallbackGroup::SharedPtr m_callback_group_subscribers;
-  rclcpp::TimerBase::SharedPtr m_timer;
-  void onTimer();
+    class SWIFT_NAV_ROS2_PUBLIC SwiftNavDriverNode : public rclcpp::Node {
+    public:
+        explicit SwiftNavDriverNode(const rclcpp::NodeOptions &options);
+        SwiftNavDriverPtr m_swift_nav{nullptr};
 
-};
+        void process();
+
+    private:
+        rclcpp::Publisher<sensor_msgs::msg::NavSatFix>::SharedPtr m_gnss_publisher;
+        rclcpp::CallbackGroup::SharedPtr m_callback_group_subscribers;
+    };
 }  // namespace swift_nav
 
 #endif  // SWIFT_NAV_ROS2__SWIFT_NAV_ROS2_NODE_HPP_
