@@ -28,9 +28,7 @@ namespace swift_nav {
 
     class SWIFT_NAV_ROS2_PUBLIC SwiftNavDriver {
     public:
-        SwiftNavDriver(const char *serial_name, std::string frame_id);
-        void set_parameters(int64_t baudrate);
-        int32_t check_param() const;
+        SwiftNavDriver(const char *serial_name, std::string frame_id, int baudrate);
         void init();
         void process();
         std::pair<void *, std::string> getOutput();
@@ -39,8 +37,6 @@ namespace swift_nav {
         sbp::State m_s;
         SbpSerialReader m_reader;
         GNSSHandler* m_handler;
-        // Default parameters
-        int64_t m_baudrate;
     };
 
 }  // namespace swift_nav

@@ -8,8 +8,9 @@
 
 namespace swift_nav {
 
-    SbpSerialReader::SbpSerialReader(const char *serial_name) {
+    SbpSerialReader::SbpSerialReader(const char *serial_name, int baudrate) {
         this->m_serial_name = serial_name;
+        this->baudrate = baudrate;
         int result = 0;
 
         printf("Attempting to configure the serial port...\n");
@@ -30,7 +31,7 @@ namespace swift_nav {
             exit(EXIT_FAILURE);
         }
 
-        result = sp_set_baudrate(m_piksi_port, 230400);
+        result = sp_set_baudrate(m_piksi_port, this->baudrate);
         if (result != SP_OK) {
             fprintf(stderr, "Cannot set port baud rate!\n");
             exit(EXIT_FAILURE);

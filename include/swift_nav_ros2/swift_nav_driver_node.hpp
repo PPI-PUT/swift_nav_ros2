@@ -33,7 +33,11 @@ namespace swift_nav {
 
     private:
         rclcpp::Publisher<sensor_msgs::msg::NavSatFix>::SharedPtr m_gnss_publisher;
-        rclcpp::CallbackGroup::SharedPtr m_callback_group_subscribers;
+        rclcpp::Publisher<geometry_msgs::msg::TwistWithCovarianceStamped>::SharedPtr m_speed_publisher;
+        rclcpp::Publisher<sensor_msgs::msg::TimeReference>::SharedPtr m_gps_time_publisher;
+        rclcpp::Publisher<sensor_msgs::msg::Imu>::SharedPtr m_imu_publisher;
+
+        void createPublishers();
     };
 }  // namespace swift_nav
 

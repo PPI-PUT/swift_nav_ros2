@@ -1,5 +1,11 @@
 /**:
   ros__parameters:
-    baudrate: 256000
+    # After changing the baudrate there, remember to change it in the Swift Console application.
+    # Aviable values: 57600 | 115200 | 230400 | 460800 | 921600 | 1000000
+    baudrate: 230400
+    
+    # The port to which the Piksi is connected to.
     port: "/dev/sensors/gnss"
+    
+    # ROS2 frame id.
     frame_id: "gnss"

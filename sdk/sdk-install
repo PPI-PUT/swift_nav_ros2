@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+echo "Installing GNSS dependencies..."
+
+
+echo "Building and installing libserialport"
+#clone, build and install libserialport library
+sudo git clone https://github.com/sigrokproject/libserialport.git
+cd libserialport
+
+./autogen.sh
+./configure
+make
+sudo make install
+
+cd ..
+
+echo "Building and installing libsbp"
+#build and install libsbp library
+sudo git clone https://github.com/swift-nav/libsbp.git
+
+cd libsbp
+git submodule update --init
+cd ..
+
+mv libsbp/c ./libsbp_c
+rm -rf libsbp
+
+cd libsbp_c
+[ -d "build" ] && sudo rm -rf build\
+
+mkdir build
+cd build
+
+cmake ../
+sudo make
+sudo make install
+cd ~
+
+echo "Finished installing GNSS dependencies"
