@@ -1,0 +1,7 @@
+.idea
+/sdk/build
+/sdk/install
+/sdk/libsbp_c
+/sdk/libserialport
+/sdk/log
+

@@ -20,22 +20,14 @@
 
 namespace swift_nav {
 
-    SwiftNavDriver::SwiftNavDriver(const char *serial_name, std::string frame_id) : m_reader(serial_name) {
+    SwiftNavDriver::SwiftNavDriver(const char *serial_name, std::string frame_id, int baudrate) : m_reader(serial_name,
+                                                                                                           baudrate) {
         this->m_handler = new GNSSHandler(&m_s, frame_id);
         SwiftNavDriver::init();
     }
 
     void SwiftNavDriver::init() {
         m_s.set_reader(&m_reader);
-    }
-
-    void SwiftNavDriver::set_parameters(int64_t baudrate) {
-        m_baudrate = baudrate;
-    }
-
-    int32_t SwiftNavDriver::check_param() const {
-        std::cout << "Baudrate: " << m_baudrate << std::endl;
-        return 0;
     }
 
     void SwiftNavDriver::process() {

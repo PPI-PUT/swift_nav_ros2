@@ -13,12 +13,13 @@ namespace swift_nav {
     class SbpSerialReader : public sbp::IReader {
     public:
         SbpSerialReader() = default;
-        SbpSerialReader(const char *serial_name);
+        SbpSerialReader(const char *serial_name, int baudrate);
         s32 read(u8 *buffer, u32 buffer_length) override;
         ~SbpSerialReader();
 
     private:
         const char *m_serial_name;
+        int baudrate;
         struct sp_port *m_piksi_port;
     };
 }  // namespace swift_nav
