@@ -44,11 +44,9 @@ ament_auto_add_library(${PROJECT_NAME} SHARED
 target_link_libraries(${PROJECT_NAME} /usr/local/lib/libsbp.a)
 target_link_libraries(${PROJECT_NAME} /usr/local/lib/libserialport.so)
 
-autoware_set_compile_options(${PROJECT_NAME})
 
 set(SWIFT_NAV_NODE_EXE swift_nav_ros2_exe)
 ament_auto_add_executable(${SWIFT_NAV_NODE_EXE} src/main.cpp)
-autoware_set_compile_options(${SWIFT_NAV_NODE_EXE})
 
 #########################################################
 
