@@ -22,50 +22,61 @@ find_package(ament_cmake_auto REQUIRED)
 ament_auto_find_build_dependencies()
 
 set(SWIFT_NAV_ROS2_LIB_SRC
-        "src/swift_nav_driver.cpp"
-        "src/gnss_handler.cpp"
-        "src/sbp_serial_reader.cpp"
-        "src/swift_nav_driver_node.cpp"
-)
+  "src/swift_nav_driver.cpp"
+  "src/gnss_handler.cpp"
+  "src/sbp_serial_reader.cpp"
+  )
 
 set(SWIFT_NAV_ROS2_LIB_HEADERS
-        "include/swift_nav_ros2/swift_nav_driver.hpp"
-        "include/swift_nav_ros2/visibility_control.hpp"
-        "include/swift_nav_ros2/sbp_serial_reader.hpp"
-        "include/swift_nav_ros2/gnss_handler.hpp"
-)
+  "include/swift_nav_ros2/swift_nav_driver.hpp"
+  "include/swift_nav_ros2/visibility_control.hpp"
+  "include/swift_nav_ros2/sbp_serial_reader.hpp"
+  "include/swift_nav_ros2/gnss_handler.hpp"
+  )
 
 # generate library
 ament_auto_add_library(${PROJECT_NAME} SHARED
   ${SWIFT_NAV_ROS2_LIB_SRC}
   ${SWIFT_NAV_ROS2_LIB_HEADERS}
-)
+  )
+
+set(SWIFT_NAV_ROS2_NODE_SRC
+  "src/swift_nav_driver_node.cpp"
+  )
+
+set(SWIFT_NAV_ROS2_NODE_HEADERS
+  "include/swift_nav_ros2/swift_nav_driver_node.hpp"
+  )
+
+# generate component node library
+ament_auto_add_library(${PROJECT_NAME}_node SHARED
+  ${SWIFT_NAV_ROS2_NODE_SRC}
+  ${SWIFT_NAV_ROS2_NODE_HEADERS}
+  )
 
 target_link_libraries(${PROJECT_NAME} /usr/local/lib/libsbp.a)
 target_link_libraries(${PROJECT_NAME} /usr/local/lib/libserialport.so)
 
-autoware_set_compile_options(${PROJECT_NAME})
 
 set(SWIFT_NAV_NODE_EXE swift_nav_ros2_exe)
 ament_auto_add_executable(${SWIFT_NAV_NODE_EXE} src/main.cpp)
-autoware_set_compile_options(${SWIFT_NAV_NODE_EXE})
 
 #########################################################
 
 # Testing
-if(BUILD_TESTING)
+if (BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
   ament_lint_auto_find_test_dependencies()
 
   # Unit tests
-#  set(TEST_SOURCES test/test_swift_nav_driver.cpp)
-#  set(TEST_SWIFT_NAV_ROS2_EXE test_swift_nav_driver)
-#  ament_add_gtest(${TEST_SWIFT_NAV_ROS2_EXE} ${TEST_SOURCES})
-#  target_link_libraries(${TEST_SWIFT_NAV_ROS2_EXE} ${PROJECT_NAME})
-endif()
+  #  set(TEST_SOURCES test/test_swift_nav_driver.cpp)
+  #  set(TEST_SWIFT_NAV_ROS2_EXE test_swift_nav_driver)
+  #  ament_add_gtest(${TEST_SWIFT_NAV_ROS2_EXE} ${TEST_SOURCES})
+  #  target_link_libraries(${TEST_SWIFT_NAV_ROS2_EXE} ${PROJECT_NAME})
+endif ()
 
 # ament package generation and installing
 ament_auto_package(INSTALL_TO_SHARE
   launch
   param
-)
+  )
